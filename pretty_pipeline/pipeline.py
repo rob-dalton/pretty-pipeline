@@ -21,7 +21,7 @@ class Transform(Step):
     A Transform is a subclass of Step. When run, its function
     is passed Pipeline.data as the first positional argument.
     """
-    def run(self, data:DataFrame):
+    def run(self, data):
         return self.func(data, *self.args, **self.kwargs)
 
 
@@ -64,14 +64,14 @@ class Pipeline(object):
     def __init__(self,
                  data=None,
                  extract:Extract=None,
-                 steps:List[Union[Step, Transform, Load]],
+                 steps:List[Union[Step, Transform, Load]]=None,
                  load:Load=None):
         self.data = data
         self.extract = extract
         self.steps = steps
         self.load = load
 
-    def _extract(self)->DataFrame:
+    def _extract(self):
         """Run Step for extraction.
 
         Step is passed Pipeline.source as its first positional arg.
