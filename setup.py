@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pretty-pipeline",
-    version="0.0.1",
+    version="0.0.3",
     author="Rob Dalton",
     description="Package for creating ETL pipelines.",
     long_description=long_description,
