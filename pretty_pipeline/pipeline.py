@@ -25,16 +25,16 @@ class Transform(Step):
         return self.func(data, *self.args, **self.kwargs)
 
 
-class Extract(Transform):
+class Extract(Step):
     """Extraction to run in a data pipeline.
 
-    Extract is a subclass of Transform. It requires a source keyword
+    Extract is a subclass of Step. It requires a source keyword
     argument (indicates where the data will be sourced from).
     """
     def __init__(self, *args, **kwargs):
         if kwargs.get('source') is None:
             raise Exception("No source provided for Extract.")
-        super(Load, self).__init__(*args, **kwargs)
+        super(Extract, self).__init__(*args, **kwargs)
 
 
 class Load(Transform):
@@ -71,15 +71,6 @@ class Pipeline(object):
         self.steps = steps
         self.load = load
 
-    def _extract(self):
-        """Run Step for extraction.
-
-        Step is passed Pipeline.source as its first positional arg.
-        """
-        new_args = [arg for args in self.extract.args]
-        new_args.insert(0, self.source)
-        self.extract.args = new_args
-        return self.extract.run()
 
     def run(self):
         # set data
@@ -87,7 +78,7 @@ class Pipeline(object):
             # run extract if no data source provided.
             # NOTE: wait til run() to call _extract() in case
             #       source depends on other Pipelines.
-            self.data = self._extract()
+            self.data = self.extract.run()
 
         # run steps
         for step in self.steps:
